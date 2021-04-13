@@ -15,6 +15,7 @@ type KafkaConsumer struct {
 }
 
 // NewKafkaConsumer creates a new KafkaConsumer struct with its message channel as dependency
+// ? Looks like a constructor
 func NewKafkaConsumer(msgChan chan *ckafka.Message) *KafkaConsumer {
 	return &KafkaConsumer{
 		MsgChan: msgChan,
