@@ -1,1 +1,2 @@
-simulator/ .env
+.docker
+simulator/.env

@@ -32,6 +32,7 @@ type PartialRoutePosition struct {
 
 // NewRoute creates a *Route struct
 func NewRoute() *Route {
+	//? Creates new instance of Route 
 	return &Route{}
 }
 
