@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	kafka "github.com/codeedu/imersaofsfc2-simulator/application/kafka"
-	"github.com/codeedu/imersaofsfc2-simulator/infra/kafka"
-	chafka "github.com/confluentinc/confluent-kafka-go/kafka"
+	kafka2 "github.com/risaddex/fullstackfullcycle2-simulator/application/kafka"
+	"github.com/risaddex/fullstackfullcycle2-simulator/infra/kafka"
+	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/joho/godotenv"
 	"log"
 
@@ -26,7 +26,7 @@ func main()  {
 	go consumer.Consume()
 	// Infinitely iterates over channel
 	for msg := range msgChan {
-		go kafka.Produce(msg)
+		go kafka2.Produce(msg)
 		// Prints every message released in this channel
 		fmt.Println(string(msg.Value))
 	}
