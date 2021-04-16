@@ -9,7 +9,11 @@ import { RouteExistsError } from "../errors/route-exists.error"
 import { useSnackbar } from "notistack"
 import { Navbar } from "./Navbar"
 
-// const API_URL = process.env.REACT_APP_API_URL
+//? Using version @2.4.0 for compatibility with NestJS
+
+import io from "socket.io-client";
+
+const API_URL = process.env.REACT_APP_API_URL as string
 
 const MOCK_DATA = [
   {
@@ -69,7 +73,14 @@ export const Mapping = () => {
   const [routes, setRoutes] = useState<Route[]>([])
   const [routeIdSelected, setRouteIdSelected] = useState<string>("")
   const mapRef = useRef<GoogleMap>()
+  const socketIORef = useRef<SocketIOClient.Socket>()
   const { enqueueSnackbar } = useSnackbar()
+
+  useEffect(() => {
+   socketIORef.current =  io.connect(API_URL)
+   socketIORef.current.on('connect', () => console.log('connected!'))
+    
+  }, [])
 
   useEffect(() => {
     // fetch(`${API_URL}/routes`)

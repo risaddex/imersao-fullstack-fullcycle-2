@@ -1,10 +1,16 @@
 {
 	"folders": [
     {
-      "path": "simulator",
+      "path": "simulator"
     },
     {
       "path": "nest-api"
+    },
+    {
+      "path": "react-frontend"
+    },
+    {
+      "path": "apache-kafka"
     }
   ],
   "settings": {
