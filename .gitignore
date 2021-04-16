@@ -1,3 +1,4 @@
 .docker
 simulator/.env
 node_modules
+.vscode

@@ -11,7 +11,7 @@ import { Navbar } from "./Navbar"
 
 //? Using version @2.4.0 for compatibility with NestJS
 
-import io from "socket.io-client";
+import io from "socket.io-client"
 
 const API_URL = process.env.REACT_APP_API_URL as string
 
@@ -76,21 +76,55 @@ export const Mapping = () => {
   const socketIORef = useRef<SocketIOClient.Socket>()
   const { enqueueSnackbar } = useSnackbar()
 
+  const finishRoute = useCallback(
+    (route: Route) => {
+      enqueueSnackbar(`${route.title} finalizou!`, {
+        variant: "success",
+      })
+    },
+    [enqueueSnackbar]
+  )
+  // Connection with socket.io
   useEffect(() => {
-   socketIORef.current =  io.connect(API_URL)
-   socketIORef.current.on('connect', () => console.log('connected!'))
-    
-  }, [])
+    if (!socketIORef.current?.connected) {
+      socketIORef.current = io.connect(API_URL)
+      socketIORef.current.on("connect", () => console.log("connected!"))
+    }
+    const handler = (data: {
+      routeId: string
+      position: [number, number]
+      finished: boolean
+    }) => {
+      mapRef.current?.moveCurrentMarker(data.routeId, {
+        lat: data.position[0],
+        lng: data.position[1],
+      })
+      const route = routes.find(
+        (route) => route._id === data.routeId
+      ) as Route
+      if (data.finished) {
+        finishRoute(route)
+      }
+    }
 
+    // emit event
+    socketIORef.current?.on("new-position", handler)
+    // Cleanup ref for preventing multiple emitters
+    return () => {
+      socketIORef.current?.off("new-position", handler)
+    }
+  }, [finishRoute, routeIdSelected, routes])
+
+  // Fetch from routes API
   useEffect(() => {
     // fetch(`${API_URL}/routes`)
     //   .then((res) => res.json())
     //   .then((data) => setRoutes(data));
     setRoutes(MOCK_DATA)
   }, [])
-
-  // IIFE since useEffect can't be async
+  // Loads map from google API
   useEffect(() => {
+    // IIFE since useEffect can't be async
     ;(async () => {
       // Get current position
       const [, position] = await Promise.all([
@@ -123,8 +157,8 @@ export const Mapping = () => {
             icon: makeMarkerIcon(color),
           },
         })
-        socketIORef.current?.emit('new-direction', {
-          routeId: routeIdSelected
+        socketIORef.current?.emit("new-direction", {
+          routeId: routeIdSelected,
         })
       } catch (error) {
         if (error instanceof RouteExistsError) {
