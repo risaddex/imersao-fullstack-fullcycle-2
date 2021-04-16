@@ -31,17 +31,28 @@ export class Route {
     const currentPosition = this.currentMarker.getPosition() as google.maps.LatLng
     const endPosition = this.endMarker.getPosition() as google.maps.LatLng
 
-    new google.maps.DirectionsService().route({
-      origin: currentPosition,
-      destination: endPosition,
-      travelMode: google.maps.TravelMode.DRIVING,
-    }, (result, status) => {
-      if (status === 'OK') {
-        this.directionsRenderer.setDirections(result)
-        return
+    new google.maps.DirectionsService().route(
+      {
+        origin: currentPosition,
+        destination: endPosition,
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK") {
+          this.directionsRenderer.setDirections(result)
+          return
+        }
+        throw new Error(status)
       }
-      throw new Error(status)
-    })
+    )
+  }
+  /**
+   * @see GoogleMaps recommends passing null reference instead of just deleting it
+   */
+  delete() {
+    this.currentMarker.setMap(null)
+    this.endMarker.setMap(null)
+    this.directionsRenderer.setMap(null)
   }
 }
 
@@ -55,6 +66,12 @@ export class Map {
 
   moveCurrentMarker(id: string, position: google.maps.LatLngLiteral) {
     this.routes[id].currentMarker.setPosition(position)
+  }
+
+  removeRoute(id: string) {
+    const route = this.routes[id]
+    route.delete()
+    delete this.routes[id];
   }
 
   addRoute(
