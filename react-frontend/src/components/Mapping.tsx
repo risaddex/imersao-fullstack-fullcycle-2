@@ -111,6 +111,7 @@ export const Mapping = () => {
       e.preventDefault()
       const route = routes.find((route) => route._id === routeIdSelected)
       const color = sample(shuffle(colors)) as string
+      // Filter repeated routes initialization with custom Error
       try {
         mapRef.current?.addRoute(routeIdSelected, {
           currentMarkerOptions: {
@@ -121,6 +122,9 @@ export const Mapping = () => {
             position: route?.endPosition,
             icon: makeMarkerIcon(color),
           },
+        })
+        socketIORef.current?.emit('new-direction', {
+          routeId: routeIdSelected
         })
       } catch (error) {
         if (error instanceof RouteExistsError) {
