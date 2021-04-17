@@ -1,0 +1,12 @@
+apiVersion: v1  
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  #generatesIP
+  type: LoadBalancer
+  #selects from running pods
+  selector:
+    app: backend
+  ports:
+  - port: 3000

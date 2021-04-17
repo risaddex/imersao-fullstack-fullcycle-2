@@ -13,12 +13,18 @@ import { RoutesGateway } from './routes.gateway';
     ClientsModule.registerAsync([
       {
         name: 'KAFKA_SERVICE',
-        useFactory: () => ({
+        useFactory: (): any => ({
           transport: Transport.KAFKA,
           options: {
             client: {
               clientId: process.env.KAFKA_CLIENT_ID,
               brokers: [process.env.KAFKA_BROKER],
+              ssl: true,
+              sasl: {
+                mechanism: 'plain', // !Here scram-sha-256 or scram-sha-512 would be used in real life.
+                username: process.env.KAFKA_SASL_USERNAME,
+                password: process.env.KAFKA_SASL_PASSWORD,
+              },
             },
             consumer: {
               groupId:

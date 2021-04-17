@@ -80,6 +80,10 @@ export class RoutesController implements OnModuleInit {
       };
     },
   ) {
-    this.routeGateway.sendPosition(message.value);
+    //? Fixed position so we don't get stuck in the middle of the sea xD
+    this.routeGateway.sendPosition({
+      ...message.value,
+      position: [message.value.position[1], message.value.position[0]],
+    });
   }
 }
