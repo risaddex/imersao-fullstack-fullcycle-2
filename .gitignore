@@ -1,2 +1,4 @@
 .docker
 .env
+k8s/backend/configmap.yaml
+k8s/simulator/configmap.yaml
