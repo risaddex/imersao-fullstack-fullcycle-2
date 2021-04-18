@@ -7,7 +7,7 @@ Este repositório contém todos as aplicações construídas durante a imersão 
 
 ## Tecnologias/Ferramentas utilizadas:
 1. Docker (For containerization)
-2. Kubernetes (For containers orchestration).
+2. [Kubernetes](/k8s) (For containers orchestration).
 3. Golang (Geolocation [Simulator](/simulator))
     - Simulates a moving vehicle in a specific path. Parses those as JSON and sends to Apache-Kafka for Producing the streams as Events for the Consumers.
 4. [Apache Kafka](/apache-kafka)
