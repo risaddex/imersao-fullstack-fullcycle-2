@@ -100,7 +100,6 @@ export const Mapping = () => {
     },
     [enqueueSnackbar]
   )
-  
   // Connection with socket.io
   useEffect(() => {
     if (!socketIORef.current?.connected) {
